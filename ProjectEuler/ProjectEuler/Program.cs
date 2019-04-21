@@ -28,6 +28,7 @@ namespace ProjectEuler
     	public void Solution(){
         	bool foundValue = false;
 			int i = 1;
+			DateTime startTime = DateTime.Now;
 			while(!foundValue){
 				int triangleNum = GetNthTriangleNum(i);
 				int numDivisors = GetTriangleNumDivisors(triangleNum).Count;
@@ -37,22 +38,26 @@ namespace ProjectEuler
 					Console.WriteLine($"{triangleNum} has {numDivisors} divisors.");
 					Console.WriteLine();
 					foundValue = true;
-					break;
 				}
 				else
 				{
+					if (DateTime.Now - startTime >= TimeSpan.FromSeconds(10))
+					{
+						Console.WriteLine($"{triangleNum} has {numDivisors} divisors.");
+						startTime = DateTime.Now;
+					}
 					i++;					
 				}
 			}
     	}
 
     	private int GetNthTriangleNum(int n){
-        	int triangleNum = 0;
+        	int triangleNum;
 			if (n <= 0)
 			{
 				return 0;
 			}
-			else if (triangleNums.ContainsKey(n))
+			if (triangleNums.ContainsKey(n))
 			{
 				return triangleNums[n];
 			}
@@ -65,13 +70,13 @@ namespace ProjectEuler
     	}
 
 		private List<int> GetTriangleNumDivisors(int triangleNum){
-			List<int> divisors = new List<int>();
-			for (int i = triangleNum; i >= 1; i--){
+			List<int> divisors = new List<int> {triangleNum};
+			for (int i = triangleNum / 2; i >= 1; i--){
 				if (triangleNum % i == 0)
 				{
 					if (triangleNumDivisors.ContainsKey(i))
 					{
-						divisors.Concat(triangleNumDivisors[i]);
+						divisors.AddRange(triangleNumDivisors[i]);
 						break;
 					}
 					divisors.Add(i);
