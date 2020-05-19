@@ -247,6 +247,4 @@ namespace ProjectEuler
 			return divisors;
 		}
 	}
-
-
 }
